@@ -69,7 +69,7 @@ public class CodePush implements ReactPackage {
         if (sAppVersion == null) {
             try {
                 PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-                sAppVersion = pInfo.versionName;
+                sAppVersion = "1.0";//pInfo.versionName;
             } catch (PackageManager.NameNotFoundException e) {
                 throw new CodePushUnknownException("Unable to get package info for " + mContext.getPackageName(), e);
             }
