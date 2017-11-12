@@ -79,6 +79,7 @@
 @interface CodePushConfig : NSObject
 
 @property (copy) NSString *appVersion;
+@property (copy) NSString *templateVersion;
 @property (readonly) NSString *buildVersion;
 @property (readonly) NSDictionary *configuration;
 @property (copy) NSString *deploymentKey;
