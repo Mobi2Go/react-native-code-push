@@ -160,7 +160,7 @@ static NSString *bundleResourceSubdirectory = nil;
         return binaryBundleURL;
     }
 
-    NSString *binaryAppVersion = [[CodePushConfig current] appVersion];
+    NSString *binaryAppVersion = [[CodePushConfig current] templateVersion];
     NSDictionary *currentPackageMetadata = [CodePushPackage getCurrentPackage:&error];
     if (error || !currentPackageMetadata) {
         CPLog(logMessageFormat, binaryBundleURL);
