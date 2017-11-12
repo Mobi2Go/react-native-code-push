@@ -8,6 +8,7 @@
 static CodePushConfig *_currentConfig;
 
 static NSString * const AppVersionConfigKey = @"appVersion";
+static NSString * const TemplateVersionConfigKey = @"templateversion";
 static NSString * const BuildVersionConfigKey = @"buildVersion";
 static NSString * const ClientUniqueIDConfigKey = @"clientUniqueId";
 static NSString * const DeploymentKeyConfigKey = @"deploymentKey";
@@ -30,8 +31,9 @@ static NSString * const PublicKeyKey = @"publicKey";
 {
     self = [super init];
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
-
+    
     NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *templateVersion = [infoDictionary objectForKey:@"com.mobi2go.templateversion"];
     NSString *buildVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
     NSString *deploymentKey = [infoDictionary objectForKey:@"CodePushDeploymentKey"];
     NSString *serverURL = [infoDictionary objectForKey:@"CodePushServerURL"];
@@ -51,6 +53,7 @@ static NSString * const PublicKeyKey = @"publicKey";
 
     _configDictionary = [[NSMutableDictionary alloc] initWithObjectsAndKeys:
                             appVersion,AppVersionConfigKey,
+                            templateVersion,TemplateVersionConfigKey,
                             buildVersion,BuildVersionConfigKey,
                             serverURL,ServerURLConfigKey,
                             clientUniqueId,ClientUniqueIDConfigKey,
@@ -64,6 +67,12 @@ static NSString * const PublicKeyKey = @"publicKey";
 - (NSString *)appVersion
 {
     return [_configDictionary objectForKey:AppVersionConfigKey];
+}
+
+- (NSString *)templateVersion
+{
+    NSString *version = [_configDictionary objectForKey:TemplateVersionConfigKey];
+    return version;
 }
 
 - (NSString *)buildVersion
@@ -99,6 +108,11 @@ static NSString * const PublicKeyKey = @"publicKey";
 - (void)setAppVersion:(NSString *)appVersion
 {
     [_configDictionary setValue:appVersion forKey:AppVersionConfigKey];
+}
+
+- (void)setTemplateVersion:(NSString *)templateVersion
+{
+    [_configDictionary setValue:templateVersion forKey:TemplateVersionConfigKey];
 }
 
 - (void)setDeploymentKey:(NSString *)deploymentKey
