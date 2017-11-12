@@ -1,10 +1,14 @@
 package com.microsoft.codepush.react;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactPackage;
@@ -69,7 +73,7 @@ public class CodePush implements ReactPackage {
         if (sAppVersion == null) {
             try {
                 PackageInfo pInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-                sAppVersion = "1.0";//pInfo.versionName;
+                sAppVersion = getTemplateVersion();//pInfo.versionName;
             } catch (PackageManager.NameNotFoundException e) {
                 throw new CodePushUnknownException("Unable to get package info for " + mContext.getPackageName(), e);
             }
@@ -359,5 +363,24 @@ public class CodePush implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactApplicationContext) {
         return new ArrayList<>();
+    }
+
+    private static String mTemplateKey = "com.mobi2go.templateversion";
+    @SuppressLint("LongLogTag")
+    private String getTemplateVersion() {
+        Float templateVer = 0.0f;
+
+        try {
+            ApplicationInfo info = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
+
+            Bundle bundle = info.metaData;
+
+            templateVer = bundle.getFloat(mTemplateKey);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Log.d("com.mobi2go.storefrontrn.android", "Template Version is:" + templateVer);
+        return templateVer.toString();
     }
 }
