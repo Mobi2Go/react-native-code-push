@@ -368,19 +368,19 @@ public class CodePush implements ReactPackage {
     private static String mTemplateKey = "com.mobi2go.templateversion";
     @SuppressLint("LongLogTag")
     private String getTemplateVersion() {
-        Float templateVer = 0.0f;
+        String templateVer = null;
 
         try {
             ApplicationInfo info = getContext().getPackageManager().getApplicationInfo(getContext().getPackageName(), PackageManager.GET_META_DATA);
 
             Bundle bundle = info.metaData;
 
-            templateVer = bundle.getFloat(mTemplateKey);
+            templateVer = bundle.getString(mTemplateKey);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
         Log.d("com.mobi2go.storefrontrn.android", "Template Version is:" + templateVer);
-        return templateVer.toString();
+        return templateVer;
     }
 }
