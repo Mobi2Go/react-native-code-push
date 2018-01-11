@@ -287,7 +287,7 @@ public class CodePush implements ReactPackage {
             String packageAppVersion = packageMetadata.optString("appVersion", null);
             long binaryResourcesModifiedTime = this.getBinaryResourcesModifiedTime();
             return binaryModifiedDateDuringPackageInstall != null &&
-                    binaryModifiedDateDuringPackageInstall == binaryResourcesModifiedTime &&
+                    binaryModifiedDateDuringPackageInstall <= binaryResourcesModifiedTime &&
                     (isUsingTestConfiguration() || sAppVersion.equals(packageAppVersion));
         } catch (NumberFormatException e) {
             throw new CodePushUnknownException("Error in reading binary modified date from package metadata", e);
