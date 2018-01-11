@@ -66,7 +66,7 @@ static NSString * const PublicKeyKey = @"publicKey";
 
 - (NSString *)appVersion
 {
-    return [_configDictionary objectForKey:AppVersionConfigKey];
+    return [_configDictionary objectForKey:TemplateVersionConfigKey];
 }
 
 - (NSString *)templateVersion
