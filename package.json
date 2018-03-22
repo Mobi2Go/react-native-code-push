@@ -1,6 +1,6 @@
 {
   "name": "react-native-code-push",
-  "version": "1000.0.0-beta",
+  "version": "1.0.2",
   "description": "React Native plugin for the CodePush service",
   "main": "CodePush.js",
   "typings": "typings/react-native-code-push.d.ts",
@@ -39,6 +39,7 @@
     "tslint": "^4.3.1",
     "typescript": "^2.1.5"
   },
+  "gitpkg":{"registry":"git@mygit.server:org/private-registry.git"},
   "rnpm": {
     "android": {
       "packageInstance": "new CodePush(${androidDeploymentKey}, getApplicationContext(), BuildConfig.DEBUG)"

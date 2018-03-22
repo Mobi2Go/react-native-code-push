@@ -32,7 +32,7 @@ static NSString * const PublicKeyKey = @"publicKey";
     self = [super init];
     NSDictionary *infoDictionary = [[NSBundle mainBundle] infoDictionary];
     
-    NSString *appVersion = [infoDictionary objectForKey:@"CFBundleShortVersionString"];
+    NSString *appVersion = [infoDictionary objectForKey:@"com.mobi2go.templateversion"];
     NSString *templateVersion = [infoDictionary objectForKey:@"com.mobi2go.templateversion"];
     NSString *buildVersion = [infoDictionary objectForKey:(NSString *)kCFBundleVersionKey];
     NSString *deploymentKey = [infoDictionary objectForKey:@"CodePushDeploymentKey"];
