@@ -21,7 +21,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.NotActiveException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -161,6 +160,14 @@ public class CodePush implements ReactPackage {
         } catch (Exception e) {
             throw new CodePushUnknownException("Error in getting binary resources modified time", e);
         }
+    }
+
+    public String getPackageFolder() {
+        JSONObject codePushLocalPackage = mUpdateManager.getCurrentPackage();
+        if (codePushLocalPackage == null) {
+            return null;
+        }
+        return mUpdateManager.getPackageFolderPath(codePushLocalPackage.optString("packageHash"));
     }
 
     @Deprecated
@@ -321,6 +328,10 @@ public class CodePush implements ReactPackage {
     /* The below 3 methods are used for running tests.*/
     public static boolean isUsingTestConfiguration() {
         return sTestConfigurationFlag;
+    }
+
+    public void setDeploymentKey(String deploymentKey) {
+        mDeploymentKey = deploymentKey;
     }
 
     public static void setUsingTestConfiguration(boolean shouldUseTestConfiguration) {

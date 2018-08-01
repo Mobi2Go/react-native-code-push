@@ -12,6 +12,7 @@ module.exports = () => {
     console.log("Running ios postlink script");
 
     var ignoreNodeModules = { ignore: "node_modules/**" };
+    var ignoreNodeModulesAndPods = { ignore: ["node_modules/**", "ios/Pods/**"] };
     var appDelegatePaths = glob.sync("**/AppDelegate.+(mm|m)", ignoreNodeModules);
 
     // Fix for https://github.com/Microsoft/react-native-code-push/issues/477
@@ -39,7 +40,13 @@ module.exports = () => {
     }
 
     // 2. Modify jsCodeLocation value assignment
-    var oldJsCodeLocationAssignmentStatement = appDelegateContents.match(/(jsCodeLocation = .*)/)[1];
+    var jsCodeLocations = appDelegateContents.match(/(jsCodeLocation = .*)/);
+    var oldJsCodeLocationAssignmentStatement;
+    if (jsCodeLocations) {
+        oldJsCodeLocationAssignmentStatement = jsCodeLocations[1];
+    } else {
+        console.log('Couldn\'t find jsCodeLocation setting in AppDelegate.');
+    }
     var newJsCodeLocationAssignmentStatement = "jsCodeLocation = [CodePush bundleURL];";
     if (~appDelegateContents.indexOf(newJsCodeLocationAssignmentStatement)) {
         console.log(`"jsCodeLocation" already pointing to "[CodePush bundleURL]".`);
@@ -144,7 +151,7 @@ module.exports = () => {
     }
 
     function getPlistPath(){
-        var xcodeProjectPaths = glob.sync(`**/*.xcodeproj/project.pbxproj`, ignoreNodeModules);
+        var xcodeProjectPaths = glob.sync(`**/*.xcodeproj/project.pbxproj`, ignoreNodeModulesAndPods);
         if (!xcodeProjectPaths){
             return getDefaultPlistPath();
         }

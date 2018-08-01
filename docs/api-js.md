@@ -51,16 +51,18 @@ This decorator provides support for letting you customize its behaviour to easil
     // Fully silent update which keeps the app in
     // sync with the server, without ever
     // interrupting the end user
-    class MyApp extends Component {}
+    class MyApp extends Component<{}> {}
     MyApp = codePush(MyApp);
+    export default MyApp;
     ```
 
 2. **Silent sync everytime the app resumes**. Same as 1, except we check for updates, or apply an update if one exists every time the app returns to the foreground after being "backgrounded".
 
     ```javascript
     // Sync for updates everytime the app resumes.
-    class MyApp extends Component {}
+    class MyApp extends Component<{}> {}
     MyApp = codePush({ checkFrequency: codePush.CheckFrequency.ON_APP_RESUME, installMode: codePush.InstallMode.ON_NEXT_RESUME })(MyApp);
+    export default MyApp;
     ```
 
 3. **Interactive**. When an update is available, prompt the end user for permission before downloading it, and then immediately apply the update. If an update was released using the `mandatory` flag, the end user would still be notified about the update, but they wouldn't have the choice to ignore it.
@@ -69,8 +71,9 @@ This decorator provides support for letting you customize its behaviour to easil
     // Active update, which lets the end user know
     // about each update, and displays it to them
     // immediately after downloading it
-    class MyApp extends Component {}
+    class MyApp extends Component<{}> {}
     MyApp = codePush({ updateDialog: true, installMode: codePush.InstallMode.IMMEDIATE })(MyApp);
+    export default MyApp;
     ```
 
 4. **Log/display progress**. While the app is syncing with the server for updates, make use of the `codePushStatusDidChange` and/or `codePushDownloadDidProgress` event hooks to log down the different stages of this process, or even display a progress bar to the user.
@@ -78,7 +81,7 @@ This decorator provides support for letting you customize its behaviour to easil
     ```javascript
     // Make use of the event hooks to keep track of
     // the different stages of the sync process.
-    class MyApp extends Component {
+    class MyApp extends Component<{}> {
         codePushStatusDidChange(status) {
             switch(status) {
                 case codePush.SyncStatus.CHECKING_FOR_UPDATE:
@@ -104,6 +107,7 @@ This decorator provides support for letting you customize its behaviour to easil
         }
     }
     MyApp = codePush(MyApp);
+    export default MyApp;
     ```
 
 ##### CodePushOptions
@@ -473,13 +477,13 @@ codePush.sync({ updateDialog: true },
 
 This method returns a `Promise` which is resolved to a `SyncStatus` code that indicates why the `sync` call succeeded. This code can be one of the following `SyncStatus` values:
 
-* __codePush.SyncStatus.UP_TO_DATE__ *(4)* - The app is up-to-date with the CodePush server.
+* __codePush.SyncStatus.UP_TO_DATE__ *(0)* - The app is up-to-date with the CodePush server.
 
-* __codePush.SyncStatus.UPDATE_IGNORED__ *(5)* - The app had an optional update which the end user chose to ignore. (This is only applicable when the `updateDialog` is used)
+* __codePush.SyncStatus.UPDATE_IGNORED__ *(2)* - The app had an optional update which the end user chose to ignore. (This is only applicable when the `updateDialog` is used)
 
-* __codePush.SyncStatus.UPDATE_INSTALLED__ *(6)* - The update has been installed and will be run either immediately after the `syncStatusChangedCallback` function returns or the next time the app resumes/restarts, depending on the `InstallMode` specified in `SyncOptions`.
+* __codePush.SyncStatus.UPDATE_INSTALLED__ *(1)* - The update has been installed and will be run either immediately after the `syncStatusChangedCallback` function returns or the next time the app resumes/restarts, depending on the `InstallMode` specified in `SyncOptions`.
 
-* __codePush.SyncStatus.SYNC_IN_PROGRESS__ *(7)* - There is an ongoing `sync` operation running which prevents the current call from being executed.
+* __codePush.SyncStatus.SYNC_IN_PROGRESS__ *(4)* - There is an ongoing `sync` operation running which prevents the current call from being executed.
 
 The `sync` method can be called anywhere you'd like to check for an update. That could be in the `componentWillMount` lifecycle event of your root component, the onPress handler of a `<TouchableHighlight>` component, in the callback of a periodic timer, or whatever else makes sense for your needs. Just like the `checkForUpdate` method, it will perform the network request to check for an update in the background, so it won't impact your UI thread and/or JavaScript thread's responsiveness.
 
@@ -555,15 +559,15 @@ This enum specifies when you would like your app to sync with the server for upd
 
 This enum is provided to the `syncStatusChangedCallback` function that can be passed to the `sync` method, in order to hook into the overall update process. It includes the following values:
 
-* __codePush.SyncStatus.CHECKING_FOR_UPDATE__ *(0)* - The CodePush server is being queried for an update.
-* __codePush.SyncStatus.AWAITING_USER_ACTION__ *(1)* - An update is available, and a confirmation dialog was shown to the end user. (This is only applicable when the `updateDialog` is used)
-* __codePush.SyncStatus.DOWNLOADING_PACKAGE__ *(2)* - An available update is being downloaded from the CodePush server.
-* __codePush.SyncStatus.INSTALLING_UPDATE__ *(3)* - An available update was downloaded and is about to be installed.
-* __codePush.SyncStatus.UP_TO_DATE__ *(4)* - The app is fully up-to-date with the configured deployment.
-* __codePush.SyncStatus.UPDATE_IGNORED__ *(5)* - The app has an optional update, which the end user chose to ignore. (This is only applicable when the `updateDialog` is used)
-* __codePush.SyncStatus.UPDATE_INSTALLED__ *(6)* - An available update has been installed and will be run either immediately after the `syncStatusChangedCallback` function returns or the next time the app resumes/restarts, depending on the `InstallMode` specified in `SyncOptions`.
-* __codePush.SyncStatus.SYNC_IN_PROGRESS__ *(7)* - There is an ongoing `sync` operation running which prevents the current call from being executed.
-* __codePush.SyncStatus.UNKNOWN_ERROR__ *(-1)* - The sync operation encountered an unknown error.
+* __codePush.SyncStatus.UP_TO_DATE__ *(0)* - The app is fully up-to-date with the configured deployment.
+* __codePush.SyncStatus.UPDATE_INSTALLED__ *(1)* - An available update has been installed and will be run either immediately after the `syncStatusChangedCallback` function returns or the next time the app resumes/restarts, depending on the `InstallMode` specified in `SyncOptions`.
+* __codePush.SyncStatus.UPDATE_IGNORED__ *(2)* - The app has an optional update, which the end user chose to ignore. (This is only applicable when the `updateDialog` is used)
+* __codePush.SyncStatus.UNKNOWN_ERROR__ *(3)* - The sync operation encountered an unknown error.
+* __codePush.SyncStatus.SYNC_IN_PROGRESS__ *(4)* - There is an ongoing `sync` operation running which prevents the current call from being executed.
+* __codePush.SyncStatus.CHECKING_FOR_UPDATE__ *(5)* - The CodePush server is being queried for an update.
+* __codePush.SyncStatus.AWAITING_USER_ACTION__ *(6)* - An update is available, and a confirmation dialog was shown to the end user. (This is only applicable when the `updateDialog` is used)
+* __codePush.SyncStatus.DOWNLOADING_PACKAGE__ *(7)* - An available update is being downloaded from the CodePush server.
+* __codePush.SyncStatus.INSTALLING_UPDATE__ *(8)* - An available update was downloaded and is about to be installed.
 
 ##### UpdateState
 
